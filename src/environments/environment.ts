@@ -8,7 +8,7 @@ export const environment = {
 
   appVersion: packageInfo.version,
   production: false,
-  api: 'http://localhost:3000/api'
+  api: 'http://65.109.134.87:3000/api'
 
 };
 /*
