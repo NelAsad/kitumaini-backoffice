@@ -1,0 +1,112 @@
+<div class="row">
+    <div class="col-sm-12">
+        <app-card cardTitle="Ajouter un utilisateur" [options]="false">
+            <div class="row">
+                <div class="col-md-12">
+                    <form [formGroup]="userForm" (ngSubmit)="save_user()">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <input formControlName="name" type="text" class="form-control"
+                                        placeholder="Nom complet" />
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <input formControlName="username" type="text" class="form-control"
+                                        placeholder="Nom d'utilisateur" />
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <input formControlName="email" type="text" class="form-control"
+                                        placeholder="Email" />
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <input formControlName="password" type="password" class="form-control"
+                                        placeholder="Mot de passe" />
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <select formControlName="role" class="form-control">
+                                        <option value="0">Choisir un rôle</option>
+                                        @for (role of roles; track $index) {
+                                            <option value="{{role[0]}}">{{role[1]}}</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <select formControlName="site" class="form-control">
+                                        <option value="0">Choisir un site</option>
+                                        @for (site of organisation?.sites; track $index) {
+                                            <option value="{{site['id']}}">{{site['libelle_site']}}</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-save"></i>
+                            Enregistrer
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </app-card>
+    </div>
+
+    <hr>
+
+    <div class="col-xl-12">
+        <app-card cardTitle="Utilisateurs" [options]="false" blockClass="table-border-style">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nom</th>
+                            <th>Nom d'utilisateur</th>
+                            <th>Email</th>
+                            <th>Rôle</th>
+                            <th>Statut</th>
+                            <th>Nouveau</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (user of organisation?.users; track $index) {
+                        <tr>
+                            <th scope="row">{{user['id']}}</th>
+                            <td>{{user['name']}}</td>
+                            <td>{{user['username']}}</td>
+                            <td>{{user['email']}}</td>
+                            <td>{{user['role']}}</td>
+                            <td>{{user['active']}}</td>
+                            <td>{{user['new_account']}}</td>
+                            <td>
+                                <a style="cursor: pointer;" (click)="explorer_user(user['id'])"
+                                    class="label btn-primary text-white f-12 rounded-pill"> <i class="fa fa-book"></i>
+                                    Explorer</a>
+                                <!-- <a style="cursor: pointer;" (click)="explorer_site(user['id'])"
+                                    class="label btn-primary text-white f-12 rounded-pill"> <i class="fa fa-edit"></i>
+                                    Editer</a>
+                                -->
+                                <a style="cursor: pointer;" (click)="changer_statut_user(user['id'], user['active'])"
+                                    class="label btn-primary text-white f-12 rounded-pill"> <i class="fa fa-ban"></i>
+                                    Bloquer</a>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </app-card>
+    </div>
+    
+</div>

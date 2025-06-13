@@ -1,0 +1,133 @@
+<div class="row">
+    <div class="col-sm-12">
+        <app-card cardTitle="Afficher le résultat simplifié pour un exercice" [options]="false">
+            <div class="row" [hidden]="!showFilterSection">
+                <div class="col-md-12">
+                    <form [formGroup]="filtreResultatSimplifieForm" (ngSubmit)="filtre_resultat_simplfie()">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-3">
+                                <div class="form-group">
+                                    <input formControlName="filtre_date_debut" type="date"
+                                        class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3">
+                                <div class="form-group">
+                                    <input formControlName="filtre_date_fin" type="date" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fa fa-filter"></i>
+                                    Filtrer
+                                </button>
+                            </div>
+                            <div class="col-md-3 col-sm-3">
+                                <button type="button" class="btn btn-danger w-100"
+                                    (click)="remove_resultat_simplifie_filtre()">
+                                    <i class="fa fa-times"></i>
+                                    Supprimer le Filtrer
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <hr>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <form [formGroup]="resultatSimplifieForm" (ngSubmit)="get_resultat_data()">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <select formControlName="resultat_simplifie_exercice" class="form-control">
+                                        <option value="">Choisir un exercice</option>
+                                        @for (exercice of organisation?.exercices; track $index) {
+                                            <option value="{{exercice['id']}}">{{exercice['libelle_exercice']}}</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-save"></i>
+                            Afficher le résultat simplifié pour l'exercice
+                        </button>
+                        <button class="btn btn-primary" [hidden]="ShowPrintResultatSimplifieBtn" (click)="exportExcelResultatSimplifie()">
+                            <i class="fa fa-file"></i>
+                            Export au format Excel
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </app-card>
+    </div>
+
+    <hr>
+
+    <div class="col-xl-12">
+        <app-card cardTitle="Résultat simplifié" [options]="false" blockClass="table-border-style">
+            <div class="table-responsive">
+                <table class="table table-hover" id="table_resultat_simplifie">
+                    <tbody>
+
+                        <tr>
+                            <td colspan="3">Comptes de Charges</td>
+                        </tr>
+                        <tr>
+                            <td>Numéro de compte</td>
+                            <td>Libellé</td>
+                            <td>Solde</td>
+                        </tr>
+                        @for (compte of comptesCharges; track $index) {
+                            <tr>
+                                <td>{{compte.num_compte}}</td>
+                                <td>{{compte.libelle_compte}}</td>
+                                <td>{{compte.debit - compte.credit}}</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td colspan="2">Total Charges</td>
+                            <td>{{totalCharges}}</td>
+                        </tr>
+
+
+                        <tr>
+                            <td colspan="3">Comptes de Produits</td>
+                        </tr>
+                        <tr>
+                            <td>Numéro de compte</td>
+                            <td>Libellé</td>
+                            <td>Solde</td>
+                        </tr>
+                        @for (compte of comptesProduits; track $index) {
+                            <tr>
+                                <td>{{compte.num_compte}}</td>
+                                <td>{{compte.libelle_compte}}</td>
+                                <td>{{compte.debit - compte.credit}}</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td colspan="2">Total Produits</td>
+                            <td>{{totalProduits}}</td>
+                        </tr>
+
+
+                        <tr>
+                            <td colspan="2">RESULTAT</td>
+                            <td>{{totalProduits - totalCharges}}</td>
+                        </tr>
+
+
+                    </tbody>
+                </table>
+            </div>
+        </app-card>
+    </div>
+
+
+
+</div>

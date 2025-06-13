@@ -1,0 +1,202 @@
+<div class="row">
+    <div class="col-sm-12">
+        <app-card cardTitle="Effectuer un filtre sur le grand livre" [options]="false">
+
+            <div class="row" [hidden]="!showFilterSection">
+                <div class="col-md-12">
+                    <form [formGroup]="filtreBilanForm" (ngSubmit)="filtre_bilan()">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-3">
+                                <div class="form-group">
+                                    <input formControlName="filtre_date_debut" type="date"
+                                        class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3">
+                                <div class="form-group">
+                                    <input formControlName="filtre_date_fin" type="date" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fa fa-filter"></i>
+                                    Filtrer
+                                </button>
+                            </div>
+                            <div class="col-md-3 col-sm-3">
+                                <button type="button" class="btn btn-danger w-100"
+                                    (click)="remove_bilan_filtre()">
+                                    <i class="fa fa-times"></i>
+                                    Supprimer le Filtrer
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <hr>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <form [formGroup]="bilanForm" (ngSubmit)="get_bilan_data()">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <select formControlName="bilan_exercice" class="form-control">
+                                        <option value="">Choisir un exercice</option>
+                                        @for (exercice of organisation?.exercices; track $index) {
+                                            <option value="{{exercice['id']}}">{{exercice['libelle_exercice']}}</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-save"></i>
+                            Afficher le résultat simplifié pour l'exercice
+                        </button>
+                        <button class="btn btn-primary" [hidden]="ShowPrintBilanBtn" (click)="exportExcelBilan()">
+                            <i class="fa fa-file"></i>
+                            Export au format Excel
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </app-card>
+    </div>
+
+    <hr>
+
+    <div class="col-xl-12">
+        <app-card cardTitle="Bilan" [options]="false" blockClass="table-border-style">
+            <div class="table-responsive">
+                <table class="table table-hover" id="table_bilan">
+
+                    <tbody>
+                        <tr class="text-primary">
+                            <td colspan="2" class="text-center">ACTIFS</td>
+                            <td colspan="2" class="text-center">PASSIFS</td>
+                        </tr>
+                        <tr class="text-warning">
+                            <td>Actif immobilisés</td>
+                            <td>Brut</td>
+                            <td colspan="2">Capitaux propres</td>
+                        </tr>
+                        <tr>
+                            <td>Immobilisations incorporelles</td>
+                            <td>{{somme_immo_incorpo}}</td>
+                            <td>Capital Social</td>
+                            <td>{{somme_capital_social}}</td>
+                        </tr>
+                        <tr>
+                            <td>Immobilisations corporelles</td>
+                            <td>{{somme_immo_corpo}}</td>
+                            <td>Réserves</td>
+                            <td>{{somme_reserves}}</td>
+                        </tr>
+                        <tr>
+                            <td>Immobilisations financières</td>
+                            <td>{{somme_immo_fin}}</td>
+                            <td>Résultat de l'Exercice</td>
+                            <td>{{somme_resultat_exercice}}</td>
+                        </tr>
+                        <tr class="text-warning">
+                            <td>Actif circulant</td>
+                            <td>Brut</td>
+                            <td colspan="2">Dettes</td>
+                        </tr>
+                        <tr>
+                            <td>Stocks</td>
+                            <td>{{somme_stocks}}</td>
+                            <td>Emprunt bancaire</td>
+                            <td>{{somme_emprunt_bancaire}}</td>
+                        </tr>
+                        <tr>
+                            <td>Créances clients</td>
+                            <td>{{somme_creances}}</td>
+                            <td>Dettes fournisseurs</td>
+                            <td>{{somme_dettes_fournisseur}}</td>
+                        </tr>
+                        <tr>
+                            <td>Disponibilités</td>
+                            <td>{{somme_disponibilites}}</td>
+                            <td>Dettes fiscales et sociales</td>
+                            <td>{{somme_dettes_fisca_soc}}</td>
+                        </tr>
+                        <tr>
+                            <td>Total</td>
+                            <td>{{ somme_immo_incorpo + somme_immo_corpo + somme_immo_fin + somme_stocks
+                                + somme_creances + somme_disponibilites }}</td>
+                            <td>Total</td>
+                            <td>{{ somme_capital_social + somme_reserves + somme_resultat_exercice +
+                                somme_emprunt_bancaire + somme_dettes_fournisseur +
+                                somme_dettes_fisca_soc }}</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+            </div>
+        </app-card>
+    </div>
+
+
+
+</div>
+
+
+
+<!-- <thead>
+    <tr>
+        <th colspan="2">Actif</th>
+        <th colspan="2">Passif</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td colspan="2"><strong>Actif Immobilisé</strong></td>
+        <td colspan="2"><strong>Capitaux Propres</strong></td>
+    </tr>
+    <tr>
+        <td>- Immobilisations incorporelles </td> <td>: 10,000 €</td>
+        <td>- Capital social </td> <td>: 10,000 €</td>
+    </tr>
+    <tr>
+        <td>- Immobilisations corporelles </td> <td>: 10,000 €</td>
+        <td>- Réserves </td> <td>: 10,000 €</td>
+    </tr>
+    <tr>
+        <td>- Immobilisations financières </td> <td>: 10,000 €</td>
+        <td>- Résultat net </td> <td>: 10,000 €</td>
+    </tr>
+    <tr>
+        <td colspan="2"><strong>Actif Circulant</strong></td>
+        <td colspan="2"><strong>Dettes à Long Terme</strong></td>
+    </tr>
+    <tr>
+        <td>- Stocks et en-cours </td> <td>: 10,000 €</td>
+        <td>- Emprunts bancaires </td> <td>: 10,000 €</td>
+    </tr>
+    <tr>
+        <td>- Créances clients </td> <td>: 10,000 €</td>
+        <td><strong>Dettes à Court Terme</strong></td>
+    </tr>
+    <tr>
+        <td>- Autres créances </td> <td>: 10,000 €</td>
+        <td>- Dettes fournisseurs </td> <td>: 10,000 €</td>
+    </tr>
+    <tr>
+        <td>- Trésorerie active (banques) </td> <td>: 10,000 €</td>
+        <td>- Dettes fiscales et sociales </td> <td>: 10,000 €</td>
+    </tr>
+    <tr>
+        <td></td> <td></td>
+        <td>- Autres dettes </td> <td>: 10,000 €</td>
+    </tr>
+    <tr>
+        <td><strong>Total Actif</strong></td> <td>: 10,000 €</td>
+        <td><strong>Total Passif</strong></td> <td>: 10,000 €</td>
+    </tr>
+</tbody> -->

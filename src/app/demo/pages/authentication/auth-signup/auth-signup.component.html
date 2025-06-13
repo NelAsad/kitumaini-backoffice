@@ -1,0 +1,42 @@
+<div class="auth-wrapper">
+  <div class="auth-content">
+    <div class="auth-bg">
+      <span class="r"></span>
+      <span class="r s"></span>
+      <span class="r s"></span>
+      <span class="r"></span>
+    </div>
+    <div class="card">
+      <div class="card-body text-center">
+        <div class="mb-4">
+          <i class="feather icon-user-plus auth-icon"></i>
+        </div>
+        <form (submit)="submit()">
+        <h3 class="mb-4">S'enregistrer</h3>
+        <div class="input-group mb-3">
+          <input [(ngModel)]="firstName" name="first_name" type="text" class="form-control" placeholder="Prenom" required />
+        </div>
+        <div class="input-group mb-3">
+          <input [(ngModel)]="lastName" name="last_name" type="text" class="form-control" placeholder="Nom" required />
+        </div>
+        
+        <div class="input-group mb-3">
+          <input [(ngModel)]="email" name="email" type="email" class="form-control" placeholder="Email" required />
+        </div>
+        <div class="input-group mb-4">
+          <input [(ngModel)]="password" name="password" type="password" class="form-control" placeholder="Password" required/>
+        </div>
+        <div class="input-group mb-4">
+          <input [(ngModel)]="passwordConfirm" name="password_confirm" type="password" class="form-control" placeholder="Confirme Password " required />
+        </div>
+        
+        <button class="btn btn-primary shadow-2 mb-4" type="submit">Sign up</button>
+      </form>
+        <p class="mb-0 text-muted">
+          Already have an account?
+          <a [routerLink]="['/auth/signin']">Log in</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

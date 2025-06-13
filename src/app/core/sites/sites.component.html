@@ -1,0 +1,73 @@
+<div class="row">
+    <div class="col-sm-12">
+        <app-card cardTitle="Ajouter un site" [options]="false">
+            <div class="row">
+                <div class="col-md-12">
+                    <form [formGroup]="siteForm" (ngSubmit)="save_site()">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <input formControlName="site_nom" type="text" class="form-control"
+                                        placeholder="Saisir le nom du site" />
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <select formControlName="site_organisation" class="form-control">
+                                        <option value="">Choisir une organisation</option>
+                                        @for (organisation of organisations; track $index) {
+                                        <option value="{{organisation['id']}}">{{organisation['libelle_organisation']}}
+                                        </option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-save"></i>
+                            Enregistrer
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </app-card>
+    </div>
+
+    <hr>
+
+    <div class="col-xl-12">
+        <app-card cardTitle="Sites" [options]="false" blockClass="table-border-style">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nom</th>
+                            <th>Organisation</th>
+                            <th>Créé le</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (site of sites; track $index) {
+                        <tr>
+                            <th scope="row">{{site['id']}}</th>
+                            <td>{{site['libelle_site']}}</td>
+                            <td>{{site['organisation']['libelle_organisation']}}</td>
+                            <td>{{site['created_at'] | date : 'dd/LL/yy, h:mm a'}}</td>
+                            <td>
+                                <a style="cursor: pointer;" (click)="explorer_site(site['id'])"
+                                    class="label btn-primary text-white f-12 rounded-pill"> <i class="fa fa-book"></i>
+                                    Explorer</a>
+                                
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </app-card>
+    </div>
+
+</div>

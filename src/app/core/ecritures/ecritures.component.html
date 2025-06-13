@@ -1,0 +1,172 @@
+<div class="row">
+    <div class="col-sm-12">
+        <app-card cardTitle="Passer une écriture" [options]="false">
+            <div class="row">
+                <div class="col-md-12">
+                    <form [formGroup]="ecrituresForm" (ngSubmit)="save_ecritures()">
+
+                        <div class="row">
+
+                            <div [hidden]="hide_site_field" class="col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <select formControlName="ecriture_site" class="form-control">
+                                        <option value="">Choisir un site</option>
+                                        @for (journal of organisation?.sites; track $index) {
+                                        <option value="{{journal['id']}}">{{journal['libelle_site']}}</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <input formControlName="ecriture_libelle" type="text" class="form-control"
+                                        placeholder="Libellé de l'ecriture" />
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <div class="form-group">
+                                    <input (change)="on_date_operation_change($event)" formControlName="ecriture_date_operation" type="date" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <div class="form-group">
+                                    <select formControlName="ecriture_journal" class="form-control">
+                                        <option value="">Choisir un journal</option>
+                                        @for (journal of organisation?.journaux; track $index) {
+                                        <option value="{{journal['id']}}">{{journal['libelle_journal']}}</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <div class="form-group">
+                                    <select formControlName="ecriture_exercice" class="form-control"
+                                        (change)="get_selected_exercice($event)">
+                                        <option value="">Choisir un exercice</option>
+                                        @for (exercice of organisation?.exercices; track $index) {
+                                        <option value="{{exercice['id']}}">{{exercice['libelle_exercice']}}</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th [width]="100">compte</th>
+                                            <th>libelle Compte</th>
+                                            <th [width]="200">debit</th>
+                                            <th [width]="200">credit</th>
+                                            <th [width]="100">Devise Op.</th>
+                                            <th [width]="5">Devise Base</th>
+                                            <th [width]="100">Taux</th>
+                                            <th [width]="100">actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let ecriture of tableaux_ecritures; index as i_">
+                                            <td>
+                                                <input list="list_comptes" id="compte-choice" name="compte-choice"
+                                                    class="form-control" [(ngModel)]="ecriture[1]"
+                                                    (change)="get_selected_compte($event, i_)" />
+                                                <datalist id="list_comptes">
+                                                    @for (comptes of selected_plan_comptes; track $index) {
+                                                    <option value="{{comptes['numeroCompte']}}">{{comptes['numeroCompte']+' -
+                                                        '+comptes['libelleCompte']}}</option>
+                                                    }
+                                                </datalist>
+                                            </td>
+
+                                            <td><input title="{{ecriture[2]}}" class="form-control" type="text" [(ngModel)]="ecriture[2]" disabled></td>
+
+                                            <td><input class="form-control" type="text" [(ngModel)]="ecriture[3]"></td>
+
+                                            <td><input class="form-control" type="text" [(ngModel)]="ecriture[4]"></td>
+
+                                            <td>
+                                                <select class="form-control" [(ngModel)]="ecriture[5]"
+                                                    (change)="change_taux_operation($event, i_)">
+                                                    <option value="">--Devise Op--</option>
+                                                    <option value="CDF">CDF</option>
+                                                    <option value="USD">USD</option>
+                                                    <option value="EUR">EUR</option>
+                                                </select>
+                                            </td>
+
+                                            <td><input title="{{devise_de_base}}" class="form-control" type="text" [(ngModel)]="devise_de_base" disabled></td>
+
+                                            <td><input title="{{ecriture[7]}}" class="form-control" type="text" [(ngModel)]="ecriture[7]" disabled></td>
+
+                                            <td>
+                                                <button title="Supprimer" class="btn btn-danger" (click)="deleterow(ecriture[0])"><i class="fa fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="7"></td>
+                                            <td>
+                                                <button title="Ajouter une ligne" class="btn btn-primary" (click)="addRow()"><i class="fa fa-plus"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary" (click)="save_ecritures()">
+                        <i class="fa fa-save"></i>
+                        Valider
+                    </button>
+
+                </div>
+            </div>
+        </app-card>
+    </div>
+
+    <hr>
+
+    <!-- <div class="col-xl-12">
+        <app-card cardTitle="Exercices" [options]="false" blockClass="table-border-style">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Libellé</th>
+                            <th>Date de début</th>
+                            <th>Date de fin</th>
+                            <th>Devise de base</th>
+                            <th>Créé le</th>
+                            <th>Organisation</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (exercice of exercices; track $index) {
+                        <tr>
+                            <th scope="row">{{exercice['id']}}</th>
+                            <td>{{exercice['libelle_exercice']}}</td>
+                            <td>{{exercice['date_debut_exercice']}}</td>
+                            <td>{{exercice['date_fin_exercice']}}</td>
+                            <td>{{exercice['devise_de_base']}}</td>
+                            <td>{{exercice['created_at'] | date : 'dd/LL/yy, h:mm a'}}</td>
+                            <td>{{exercice['organisation']['libelle_organisation']}}</td>
+                            <td>...</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </app-card>
+    </div> -->
+
+</div>

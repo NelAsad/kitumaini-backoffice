@@ -1,0 +1,72 @@
+<div class="row">
+    <div class="col-sm-12">
+        <app-card cardTitle="Ajouter un plan" [options]="false">
+            <div class="row">
+                <div class="col-md-12">
+                    <form [formGroup]="planForm" (ngSubmit)="save_plan()">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-12">
+                                <div class="form-group">
+                                    <input formControlName="libelle_plan" type="text" class="form-control"
+                                        placeholder="Saisir le libellé du plan" />
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <div class="form-group">
+                                    <input type="file" (change)="onFileChange($event)" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <div class="form-group">
+                                    <select formControlName="plan_exercice" class="form-control">
+                                        <option value="">Choisir un exercice</option>
+                                        @for (exercice of organisation?.exercices; track $index) {
+                                            <option value="{{exercice['id']}}">{{exercice['libelle_exercice']}}</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-save"></i>
+                            Enregistrer
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </app-card>
+    </div>
+
+    <hr>
+
+    <div class="col-xl-12">
+        <app-card cardTitle="Plans comptables" [options]="false" blockClass="table-border-style">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Libellé du plan</th>
+                            <th>Exercice</th>
+                            <th>Créé le</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (exercice of organisation?.exercices; track $index) {
+                        <tr>
+                            <th scope="row">{{exercice['plan'][0]['id']}}</th>
+                            <td>{{exercice['plan'][0]['libelle_plan']}}</td>
+                            <td>{{exercice['libelle_exercice']}}</td>
+                            <td>{{exercice['plan'][0]['created_at'] | date : 'dd/LL/yy, h:mm a'}}</td>
+                            <td>...</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </app-card>
+    </div>
+
+</div>

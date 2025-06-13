@@ -1,0 +1,44 @@
+<div class="auth-wrapper">
+    <div class="auth-content">
+      <div class="auth-bg">
+        <span class="r"></span>
+        <span class="r s"></span>
+        <span class="r s"></span>
+        <span class="r"></span>
+      </div>
+      <div class="card">
+        <div class="card-body text-center">
+          <div class="mb-4">
+            <i class="feather icon-unlock auth-icon"></i>
+          </div>
+  
+          <form [formGroup]="loginForm" (ngSubmit)="connect()">
+          <h3 class="mb-2">KITUMAINI</h3>
+          <p class="mb-4">Votre première connexion</p>
+  
+          <div class="alert alert-danger" [hidden]="!alertShow">
+            {{alertMsg}}
+          </div>
+  
+          <div class="input-group mb-3">
+            <input formControlName="username" name="username" type="email" class="form-control" placeholder="Saisir votre email" required />
+          </div>
+          <div class="input-group mb-4">
+            <input formControlName="password1" name="password" type="password" class="form-control" placeholder="Saisir votre mot de passe" required />
+          </div>
+          <div class="input-group mb-4">
+            <input formControlName="password2" name="password" type="password" class="form-control" placeholder="Saisir à nouveau votre mot de passe" required />
+          </div>
+          
+          <button class="btn btn-primary mb-4" type="submit">Connexion</button>
+        </form>
+  
+          <!-- <p class="mb-2 text-muted">
+            Forgot password?
+            <a [routerLink]="['/auth/reset-password']">Reset</a>
+          </p> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  

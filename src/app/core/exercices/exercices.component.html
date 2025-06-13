@@ -1,0 +1,83 @@
+<div class="row">
+    <div class="col-sm-12">
+        <app-card cardTitle="Ajouter un exercice" [options]="false">
+            <div class="row">
+                <div class="col-md-12">
+                    <form [formGroup]="exerciceForm" (ngSubmit)="save_exercice()">
+                        <div class="row">
+                            <div class="col-md-5 col-sm-12">
+                                <div class="form-group">
+                                    <input formControlName="libelle_exercice" type="text" class="form-control"
+                                        placeholder="Saisir libelle de l'exercice" />
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-12">
+                                <div class="form-group">
+                                    <input formControlName="date_debut_exercice" type="date" class="form-control"
+                                        placeholder="Date de debut" />
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-12">
+                                <div class="form-group">
+                                    <input formControlName="date_fin_exercice" type="date" class="form-control"
+                                        placeholder="Date de fin" />
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                                <div class="form-group">
+                                    <select formControlName="exercice_devise_de_base" class="form-control">
+                                        <option value="">Choisir une devise de base</option>
+                                        <option value="CDF">CDF</option>
+                                        <option value="USD">USD</option>
+                                        <option value="EUR">EUR</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-save"></i>
+                            Enregistrer
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </app-card>
+    </div>
+
+    <hr>
+
+    <div class="col-xl-12">
+        <app-card cardTitle="Exercices" [options]="false" blockClass="table-border-style">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Libellé</th>
+                            <th>Date de début</th>
+                            <th>Date de fin</th>
+                            <th>Devise de base</th>
+                            <th>Créé le</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (exercice of organisation?.exercices; track $index) {
+                        <tr>
+                            <th scope="row">{{exercice['id']}}</th>
+                            <td>{{exercice['libelle_exercice']}}</td>
+                            <td>{{exercice['date_debut_exercice']}}</td>
+                            <td>{{exercice['date_fin_exercice']}}</td>
+                            <td>{{exercice['devise_de_base']}}</td>
+                            <td>{{exercice['created_at'] | date : 'dd/LL/yy, h:mm a'}}</td>
+                            <td>...</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </app-card>
+    </div>
+
+</div>

@@ -1,0 +1,172 @@
+<div class="row">
+    <div class="col-sm-12" [hidden]="showJournalDetails">
+        <app-card cardTitle="Ajouter un journal" [options]="false">
+            <div class="row">
+                <div class="col-md-12">
+                    <form [formGroup]="journalForm" (ngSubmit)="save_journal()">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <input formControlName="libelle_journal" type="text" class="form-control"
+                                        placeholder="Saisir le libellé du journal" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-save"></i>
+                            Enregistrer
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            
+        </app-card>
+    </div>
+
+    <!-- Filtre journal -->
+    <div class="col-sm-12" [hidden]="!showJournalDetails">
+        <app-card cardTitle="Filtrer le journal" [options]="false">
+            <div class="row">
+                <div class="col-md-12">
+                    <form [formGroup]="filtreJournalForm" (ngSubmit)="filtre_journal()">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4">
+                                <div class="form-group">
+                                    <select class="form-control" (change)="get_filtre_type($event)">
+                                        <option value="1">Filtrer par Periode</option>
+                                        <option value="2">Filtrer par Excercice</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            @if (journal_filtre_type == "1") {
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="form-group">
+                                        <input formControlName="filtre_libelle_date_debut" type="date"
+                                            class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="form-group">
+                                        <input formControlName="filtre_libelle_date_fin" type="date" class="form-control" />
+                                    </div>
+                                </div>
+                            } 
+                            @else {
+                                <div class="col-md-8 col-sm-8">
+                                    <div class="form-group">
+                                        <select formControlName="filtre_journal_exercice" class="form-control">
+                                            <option value="">Choisir un exercice</option>
+                                            @for (exercice of organisation?.exercices; track $index) {
+                                            <option value="{{exercice['id']}}">{{exercice['libelle_exercice']}}</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            }
+
+                            
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-filter"></i>
+                            Filtrer
+                        </button>
+                        <button type="button" class="btn btn-danger" [hidden]="!showRemoveFiltreBtn" (click)="remove_journal_filtre()">
+                            <i class="fa fa-remove"></i>
+                            Supprimer le Filtrer
+                        </button>
+
+                    </form>
+                </div>
+            </div>
+        </app-card>
+    </div>
+
+
+    <hr>
+
+    <div class="col-xl-12" [hidden]="showJournalDetails">
+        <app-card cardTitle="Journaux" [options]="false" blockClass="table-border-style">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nom</th>
+                            <th>Créé le</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (journal of organisation?.journaux; track $index) {
+                        <tr>
+                            <th scope="row">{{journal['id']}}</th>
+                            <td>{{journal['libelle_journal']}}</td>
+                            <td>{{journal['created_at'] | date : 'dd/LL/yy, h:mm a'}}</td>
+                            <td>
+                                <a (click)="voir_journal(journal['id'])" style="cursor: pointer;"
+                                    class="label theme-bg2 text-white f-12 rounded-pill">Voir</a>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </app-card>
+    </div>
+
+
+    <div class="col-xl-12" [hidden]="!showJournalDetails">
+
+        <button type="submit" class="btn btn-primary mb-3" (click)="retour_sur_journaux()">
+            <i class="fa fa-arrow-left"></i>
+            Afficher les journaux
+        </button>
+        <button class="btn btn-primary mb-3" (click)="exportExceljournalDetails()">
+            <i class="fa fa-file"></i>
+            Exporter au format excel
+        </button>
+
+        <app-card cardTitle="Journal" [options]="false" blockClass="table-border-style">
+            <div class="table-responsive">
+                <table class="table table-hover" id="table_journal">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Libellé</th>
+                            <th>Compte</th>
+                            <th>Devise</th>
+                            <th>Taux</th>
+                            <th>Débit</th>
+                            <th>Crédit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (ecritureLine of selectedJournalEcrituresTrier; track $index) {
+                        <tr>
+                            <td>{{ecritureLine[1] | date : 'dd/LL/yy'}}</td>
+                            <td>{{ecritureLine[2]}}</td>
+                            <td>{{ecritureLine[0]['plan_item']['numeroCompte']+' -
+                                '+ecritureLine[0]['plan_item']['libelleCompte']}}</td>
+                            <td>{{ecritureLine[0]['devise']}}</td>
+                            <td>{{ecritureLine[0]['taux']}}</td>
+                            <td>{{ecritureLine[0]['debit'] * ecritureLine[0]['taux']}}</td>
+                            <td>{{ecritureLine[0]['credit'] * ecritureLine[0]['taux']}}</td>
+                        </tr>
+                        }
+                        <tr>
+                            <td colspan="5">Total</td>
+                            <td>{{totalDebit}}</td>
+                            <td>{{totalCredit}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </app-card>
+    </div>
+
+
+</div>

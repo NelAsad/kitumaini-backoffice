@@ -1,0 +1,187 @@
+<div class="row">
+
+    <div class="col-xl-12">
+        <app-card cardTitle="Demandes d'integration à l'academie" [options]="false" blockClass="table-border-style">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nom complet</th>
+                            <th>Statut</th>
+                            <th>Date de soumission</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (demande of demandes; track $index) {
+                        <tr>
+                            <th scope="row">{{demande['id']}}</th>
+                            <td>{{demande['user']['nom'] +' '+ demande['user']['postnom'] +' '+
+                                demande['user']['prenom']}}</td>
+                            <td>{{demande['statut']}}</td>
+                            <td>{{demande['dateSoumission'] | date : 'dd/LL/yyyy'}}</td>
+                            <td>
+                                <a (click)="open_modal_show_demande(content_modal_show, demande['id'])"
+                                    style="cursor: pointer;"
+                                    class="label theme-bg2 text-white f-12 rounded-pill">Voir</a>
+                                <a (click)="open_modal_approuver(content_modal_approuver, demande['id'])"
+                                    style="cursor: pointer;" href="javascript:"
+                                    class="label theme-bg text-white f-12 rounded-pill">Approuver</a>
+                                <a (click)="open_modal_rejeter(content_modal_rejeter, demande['id'])"
+                                    style="cursor: pointer;" href="javascript:"
+                                    class="label theme-bg text-white f-12 rounded-pill">Rejeter</a>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </app-card>
+    </div>
+</div>
+
+
+<ng-template #content_modal_show let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">candidature</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <table class="table table-bordered table-responsive">
+            <tr>
+                <td>Date de soumission</td>
+                <td>{{selectedDemande?.dateSoumission | date : 'dd/LL/yyyy'}}</td>
+            </tr>
+            <tr>
+                <td>Date de validation</td>
+                <td>{{selectedDemande?.dateValidation | date : 'dd/LL/yyyy'}}</td>
+            </tr>
+            <tr>
+                <td>Statut</td>
+                <td>{{selectedDemande?.statut}}</td>
+            </tr>
+            <tr>
+                <td>Groupe</td>
+                <td style="white-space: pre-line;">{{selectedDemande?.groupe?.nom}}</td>
+            </tr>
+            <tr>
+                <td colspan="2">Motivation</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="white-space: pre-line;">
+                    {{selectedDemande?.motivation}}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">Commentaire de l'admin</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="white-space: pre-line;">
+                    {{selectedDemande?.commentaireAdmin}}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    Identité de l'élève
+                </td>
+            </tr>
+            <tr>
+                <td>Nom</td>
+                <td style="white-space: pre-line;">
+                    {{selectedDemande?.user?.nom}}
+                </td>
+            </tr>
+            <tr>
+                <td>Postnom</td>
+                <td style="white-space: pre-line;">
+                    {{selectedDemande?.user?.postnom}}
+                </td>
+            </tr>
+            <tr>
+                <td>Prénom</td>
+                <td style="white-space: pre-line;">
+                    {{selectedDemande?.user?.prenom}}
+                </td>
+            </tr>
+            <tr>
+                <td>Sexe</td>
+                <td>{{selectedDemande?.user?.sexe}}</td>
+            </tr>
+            <tr>
+                <td>Téléphone</td>
+                <td>{{selectedDemande?.user?.telephone}}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td style="white-space: pre-line;">
+                    {{selectedDemande?.user?.email}}
+                </td>
+            </tr>
+            <tr>
+                <td>Date de naissance</td>
+                <td>{{selectedDemande?.user?.dateNaissance}}</td>
+            </tr>
+            <tr>
+                <td>Ecole</td>
+                <td style="white-space: pre-line;">
+                    {{selectedDemande?.user?.ecole?.nom}}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="c('Save click')">Save</button>
+    </div>
+</ng-template>
+
+<ng-template #content_modal_approuver let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Approuver la candidature</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <p>
+            L'élève sera ajouté au groupe de son école.
+            Si l'école n'a pas encore de groupe, celui-ci sera crée automatiquement.
+        </p>
+        <!-- <form action="">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <select [(ngModel)]="ApprobationGroupe" name="approbationGroupe" class="form-control">
+                            <option value="0">Veillez choisir un groupe</option>
+                            @for (groupe of groupes; track $index) {
+                            <option value="{{groupe['id']}}">{{groupe['nom']}}</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </form> -->
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="valider_candidature()">Valider</button>
+    </div>
+</ng-template>
+
+<ng-template #content_modal_rejeter let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Rejeter la candidature</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <form action="">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <textarea rows="5" [(ngModel)]="AdminComment" name="AdminComment" class="form-control" placeholder="Veillez saisir un commentaire"></textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="rejeter_candidature()">Valider</button>
+    </div>
+</ng-template>

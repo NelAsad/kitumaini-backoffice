@@ -1,0 +1,88 @@
+<div class="row">
+    <div class="col-sm-12">
+        <app-card cardTitle="Definir le taux pour une date" [options]="false">
+            <div class="row">
+                <div class="col-md-12">
+                    <form [formGroup]="tauxForm" (ngSubmit)="save_taux_du_jour()">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-12">
+                                <div class="form-group">
+                                    <input formControlName="date_taux" type="date" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                                <div class="form-group">
+                                    <select formControlName="devise_taux" type="text" class="form-control" >
+                                        <option value="">Choisir la devise</option>
+                                        <option value="CDF">CDF</option>
+                                        <option value="USD">USD</option>
+                                        <option value="EUR">EUR</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                                <div class="form-group">
+                                    <input formControlName="taux_de_change" type="text" class="form-control"
+                                        placeholder="Saisir le taux de change pour la journée" />
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                                <div class="form-group">
+                                    <select formControlName="taux_exercice" class="form-control">
+                                        <option value="">Choisir un exercice</option>
+                                        @for (exercice of organisation?.exercices; track $index) {
+                                            <option value="{{exercice['id']}}">{{exercice['libelle_exercice']}}</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-save"></i>
+                            Enregistrer
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </app-card>
+    </div>
+
+    <hr>
+
+    <!-- <div class="col-xl-12">
+        <app-card cardTitle="Exercices" [options]="false" blockClass="table-border-style">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Libellé</th>
+                            <th>Date de début</th>
+                            <th>Date de fin</th>
+                            <th>Devise de base</th>
+                            <th>Créé le</th>
+                            <th>Organisation</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (exercice of exercices; track $index) {
+                        <tr>
+                            <th scope="row">{{exercice['id']}}</th>
+                            <td>{{exercice['libelle_exercice']}}</td>
+                            <td>{{exercice['date_debut_exercice']}}</td>
+                            <td>{{exercice['date_fin_exercice']}}</td>
+                            <td>{{exercice['devise_de_base']}}</td>
+                            <td>{{exercice['created_at'] | date : 'dd/LL/yy, h:mm a'}}</td>
+                            <td>{{exercice['organisation']['libelle_organisation']}}</td>
+                            <td>...</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </app-card>
+    </div> -->
+
+</div>

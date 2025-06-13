@@ -1,0 +1,113 @@
+<div class="row">
+    <div class="col-xl-4">
+        <app-card [hidHeader]="true">
+            <h6 class="mb-4">Organisation</h6>
+            <div class="row d-flex align-items-center">
+                <div class="col-9">
+                    <h5 class="f-w-100 d-flex align-items-center m-b-0">
+                        {{organisation?.libelle_organisation}}
+                    </h5>
+                </div>
+            </div>
+        </app-card>
+    </div>
+    <div class="col-xl-4">
+        <app-card [hidHeader]="true">
+            <h6 class="mb-4">Crée le</h6>
+            <div class="row d-flex align-items-center">
+                <div class="col-9">
+                    <h5 class="f-w-100 d-flex align-items-center m-b-0">
+                        {{organisation?.created_at | date : 'dd/LL/yy, h:mm a'}}
+                    </h5>
+                </div>
+            </div>
+        </app-card>
+    </div>
+    <div class="col-xl-4">
+        <app-card [hidHeader]="true">
+            <h6 class="mb-4">Crée par</h6>
+            <div class="row d-flex align-items-center">
+                <div class="col-9">
+                    <h5 class="f-w-100 d-flex align-items-center m-b-0">
+                        {{organisation?.user?.name}}
+                    </h5>
+                </div>
+            </div>
+        </app-card>
+    </div>
+
+</div>
+
+<hr>
+
+<button class="btn btn-primary" (click)="manage_users()">
+    <i class="fa fa-user"></i>
+    Gérer les utilisateurs
+</button>
+
+<hr>
+
+<div class="row">
+
+    <div class="col-sm-12">
+        <app-card cardTitle="Ajouter un site" [options]="false">
+            <div class="row">
+                <div class="col-md-12">
+                    <form [formGroup]="siteForm" (ngSubmit)="save_site()">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <input formControlName="site_nom" type="text" class="form-control"
+                                        placeholder="Saisir le nom du site" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-save"></i>
+                            Enregistrer
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </app-card>
+    </div>
+
+
+    <div class="col-xl-12">
+        <app-card cardTitle="Sites" [options]="false" blockClass="table-border-style">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nom</th>
+                            <th>Créé le</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (site of organisation?.sites; track $index) {
+                        <tr>
+                            <th scope="row">{{site['id']}}</th>
+                            <td>{{site['libelle_site']}}</td>
+                            <td>{{site['created_at'] | date : 'dd/LL/yy, h:mm a'}}</td>
+                            <td>
+                                <a style="cursor: pointer;" (click)="explorer_site(site['id'])"
+                                    class="label btn-primary text-white f-12 rounded-pill"> <i class="fa fa-book"></i>
+                                    Explorer</a>
+                                <a style="cursor: pointer;" (click)="explorer_site(site['id'])"
+                                    class="label btn-primary text-white f-12 rounded-pill"> <i class="fa fa-edit"></i>
+                                    Editer</a>
+                                <a style="cursor: pointer;" (click)="explorer_site(site['id'])"
+                                    class="label btn-primary text-white f-12 rounded-pill"> <i class="fa fa-ban"></i>
+                                    Bloquer</a>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </app-card>
+    </div>
+</div>
